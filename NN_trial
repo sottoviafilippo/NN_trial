@@ -1,0 +1,35 @@
+class NN_trial:
+    """
+    NN. Tanh activation functions
+    """
+
+    def __init__(self, N_layers: int, N_nodes: int, input_dim = 1, output_dim = 1):
+        
+        self.N_nodes = [input_dim] + [N_nodes] * N_layers + [output_dim] # number of nodes in each layer. The first layer corresponds to the entry data, the last one to the output
+
+        self.weights = []
+        self.bs = []
+        self.N_layers = N_layers
+
+        # initialise the weights (Glorot initialisation) and the intercept (good for tanh/sigmoid)
+        for k in range(N_layers+1):
+            a = np.sqrt(6./(self.N_nodes[k] + self.N_nodes[k+1]))# half-length of the interval from which we draw the uniform distribution
+            self.weights.append(np.random.uniform(-a, a, size = ((self.N_nodes[k+1], self.N_nodes[k])) ))
+            self.bs.append(np.zeros(self.N_nodes[k+1])) # the intercept can be initialized to 0
+        pass
+
+    def predict(self, input_coordinates):
+        """
+        Forward pass, find predicted value of the solution
+        """
+
+        prediction = input_coordinates
+        for k in range(self.N_layers + 1):
+            prediction = np.tanh(np.dot(self.weights[k], prediction) + self.bs[k])
+
+        return prediction
+    
+    def train(self, lr = 0.2):
+
+        # backpropagation
+        pass
